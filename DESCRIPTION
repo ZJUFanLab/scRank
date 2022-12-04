@@ -1,0 +1,43 @@
+Package: scRank
+Title: Ranking cell types responsive to drug in sing-cell transcriptomic data.
+Version: 1.0.0
+Depends: R (>= 4.0.0), doParallel
+Authors@R:
+  person("Chengyu", "Li", email = "chengyuli@zju.edu.cn",
+         role = c("aut", "cre"))
+Description: scRank is an R package to rank cell types responsive to drug in single-cell transcriptomics data under disease condition.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Imports:
+    Seurat (>= 3.0.0),
+    methods,
+    dplyr,
+    tidyr,
+    stringr,
+    tester,
+    magrittr,
+    foreach,
+    parallel,
+    stats,
+    RSpectra,
+    ggrepel,
+    tibble,
+    dynamicTreeCut,
+    ComplexHeatmap,
+    igraph,
+    utils,
+    RhpcBLASctl,
+    crayon,
+    ggpubr,
+    ggplot2,
+    viridis,
+    rTensor,
+    pbapply,
+    Matrix,
+    scales
+Suggests: 
+    rmarkdown,
+    knitr,
+    prettydoc
