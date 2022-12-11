@@ -213,7 +213,8 @@ plot_net <- function(object,
 
   # zoom in
   order_gene <- gene_clusters %>% sort()
-  new_gene <- names(order_gene[order_gene == 7])
+  cent_loc <- G.order_gene[which(names(G.order_gene) == highlight_gene)] %>% as.numeric()
+  new_gene <- names(order_gene[order_gene == cent_loc])
   new_net <- new_net[new_gene, new_gene]
   hclust_out <- stats::hclust(stats::dist(1 - as.matrix(new_net)))
 
