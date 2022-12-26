@@ -144,7 +144,7 @@ plot_dim <- function(object,
 #' @description Modularization and visualization of drug-related subnetwork for cell types.
 #' @param object  scRank object generated from \code{\link{Constr_net}}
 #' @param celltype select a cell type to visualize its network.
-#' @param mode select a mode to visualize network. Default is \code{heatmap}.
+#' @param mode select a mode to visualize network by \code{network} or \code{heatmap}. Default is \code{heatmap}.
 #' @param gene_set a vector containing interested gene set for visualizing network.
 #' @param min_ModuleSize parameter in \code{cutreeDynamic} for the minimal the number of genes in module. Defalut is \code{10}.
 #' @param highlight_gene highlighted gene in network. Default is \code{target gene}
