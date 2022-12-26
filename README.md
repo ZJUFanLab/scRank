@@ -1,7 +1,7 @@
 # scRank
 [![R >4.0](https://img.shields.io/badge/R-%3E%3D4.0-brightgreen)](https://www.r-project.org/)
 
-<img src='https://github.com/ZJUFanLab/scRank/img/workflow.png'>
+<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/workflow.png'>
 
 
 Cells respond divergently to drugs due to the heterogeneity among cell populations,thus it is crucial to identify the drug-responsive cell population for accurately
@@ -45,7 +45,7 @@ The `meta` is required if `input` is not a Seurat objectas, where its format as 
 ## Tutorial
 In this tutorial, we will demonstrate how to  infer the drug-responsive cell type by scRank based on a demo dataset (GSE110894) containing BET inhibitor resistant and sensitive leukaemic cells.
 
-<img src='https://github.com/ZJUFanLab/scRank/img/original_data.png'>
+<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/original_data.png'>
 
 ### 1. Load the data and create a scRank object
 we load the demo dataset from Seurat object, the drug target is known as Brd4.
@@ -78,7 +78,7 @@ For visulize the rank of cell types in dimension reduction space, we can use the
 ```{r}
 plot_celltype_rank(obj)
 ```
-<img src='https://github.com/ZJUFanLab/scRank/img/scRank_data.png'>
+<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/scRank_data.png'>
 
 For visulize the modularized drug-target-gene related subnetwork in specific cell type, we can use the `plot_net` function, where the parameter `mode` can be "heatmap" or "network" for different visualization.
 
@@ -86,6 +86,6 @@ For visulize the modularized drug-target-gene related subnetwork in specific cel
 plot_net(obj, mode = "heatmap", cell_type = "sensitive")
 plot_net(obj, mode = "heatmap", cell_type = "resistant")
 ```
-<img src='https://github.com/ZJUFanLab/scRank/img/sensitive_net.png'>
-<img src='https://github.com/ZJUFanLab/scRank/img/resistant_net.png'>
+<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/sensitive_net.png'>
+<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/resistant_net.png'>
 
