@@ -1,5 +1,5 @@
 # scRank
-[![R >4.0](https://img.shields.io/badge/R-%3E%3D4.0-brightgreen)](https://www.r-project.org/) [![DOI]
+[![R >4.0](https://img.shields.io/badge/R-%3E%3D4.0-brightgreen)](https://www.r-project.org/)
 
 <img src='https://github.com/ZJUFanLab/scRank/img/original_data.png'>
 
