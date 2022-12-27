@@ -9,7 +9,7 @@ elucidating the mechanism of drug action, which is a great challenge yet. Here, 
 address it with scRank using a target-perturbed gene regulatory network (tpGRN) to rank and infer drug-responsive cell population towards in-silico drug perturbation for single-cell transcriptomic data under disease condition. scRank enables the inference of drug-responsive cell types for single-cell data under disease condition, providing new insights into the mechanism of drug action. 
 
 ## Installation
-- install dependent packages `devtools` and [`tensorR`](https://github.com/rikenbit/rTensor")
+- install dependent packages `devtools` and [`rTensor`](https://github.com/rikenbit/rTensor)
 )
 ```{r}
 #install.packages("devtools")
