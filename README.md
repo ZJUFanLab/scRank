@@ -73,14 +73,14 @@ obj <- scRank::rank_celltype(obj)
 the final infered rank of cell types that determine the drug response is stored in `obj@cell_type_rank`
 
 ### 4. Visualize the result
-For visulize the rank of cell types in dimension reduction space, we can use the `plot_dim` function.
+For visulizing the rank of cell types in dimension reduction space, we can use the `plot_dim` function.
 
 ```{r}
-plot_celltype_rank(obj)
+plot_dim(obj)
 ```
 <img src='https://github.com/ZJUFanLab/scRank/blob/main/img/scRank_data.png'>
 
-For visulize the modularized drug-target-gene related subnetwork in specific cell type, we can use the `plot_net` function, where the parameter `mode` can be "heatmap" or "network" for different visualization.
+For visulizing the modularized drug-target-gene related subnetwork in specific cell type, we can use the `plot_net` function, where the parameter `mode` can be "heatmap" or "network" for different visualization.
 
 ```{r}
 plot_net(obj, mode = "heatmap", cell_type = "sensitive")
