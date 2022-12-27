@@ -163,7 +163,7 @@ CreateScRank <- function(input,
 #' @param select_ratio percent cells of total cells to be selected in random selection. Default is 0.5.
 #' @param n_selection number of selection to create \code{n_selection} networks for a cell type. Default is 10.
 #' @param cut_ratio threshold of top percent edge weight to be cut. Edge with weight lower than the threshold will be cut. Default is 0.95.
-#' @param n.core Number of CPU cores to use. Default is all cores - 1.
+#' @param n.core Number of CPU cores to use. Default is a half of all cores.
 #' @return scRank object containing the gene regulatory network for every cell type.
 #' @import pbapply doParallel parallel foreach RSpectra methods
 #' @importFrom crayon cyan
@@ -189,7 +189,7 @@ Constr_net <- function(object,
   }
   # register parallel
   if (is.null(n.core)) {
-    n.core <- parallel::detectCores() - 1
+    n.core <- round(parallel::detectCores() / 2)
   }
   n.core <- max(1, n.core)
   if (n.core != 1) {
@@ -279,7 +279,7 @@ Constr_net <- function(object,
 #'
 #' @description Rank drug-responsive cell type based on perturbation score of drug using manifold alignment and network propagation.
 #' @param object scRank object generated from \code{\link{CreateScRank}}.
-#' @param n.core Number of CPU cores to use. Default is all cores - 1.
+#' @param n.core Number of CPU cores to use. Default is a half of all cores.
 #' @param perturbed_target Target to be perturbed in dpGRN for ranking cell type. Default is the target in \code{object@para$target}
 #' @param n_dim number of low dimensions in manifold space using manifold alignment. Default is 2.
 #' @param n_hop the number of hop for network propagation. Default is 2.
@@ -312,7 +312,7 @@ rank_celltype <- function(object,
   }
   # register parallel
   if (is.null(n.core)) {
-    n.core <- parallel::detectCores() - 2
+    n.core <- round(parallel::detectCores() / 2)
   }
   n.core <- max(1, n.core)
   if (n.core != 1) {
