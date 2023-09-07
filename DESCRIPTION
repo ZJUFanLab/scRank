@@ -9,9 +9,9 @@ Description: scRank is an R package to rank cell types responsive to drug in sin
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 LazyData: true
-LazyDataCompression:xz
+LazyDataCompression: xz
 Imports:
     Seurat (>= 3.0.0),
     methods,

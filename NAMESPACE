@@ -2,6 +2,7 @@
 
 export(Constr_net)
 export(CreateScRank)
+export(init_mod)
 export(plot_dim)
 export(plot_net)
 export(rank_celltype)

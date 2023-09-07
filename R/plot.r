@@ -139,14 +139,90 @@ plot_dim <- function(object,
   return(p)
 }
 
+#' @title Initialization for modularizing subnetwork 
+#'
+#' @description Modularization of drug-related subnetwork for cell types.
+#' @param object  scRank object generated from \code{\link{Constr_net}}
+#' @param min_ModuleSize parameter in \code{cutreeDynamic} for the minimal the number of genes in module. Default is \code{10}.
+#' @param customized_gene_set a vector contained gene name. Default is \code{Null}, but can also input customized gene set like disease-assoiciated genes.
+#' @param zoom a logical value for zooming in target-related module. Default is \code{TRUE}
+#' @importFrom magrittr %>%
+#' @importFrom dplyr arrange desc
+#' @importFrom stats dist hclust cutree
+#' @import dynamicTreeCut ggpubr ComplexHeatmap
+#' @export
+
+init_mod <- function(object,
+                     min_ModuleSize = 10, 
+                     customized_gene_set = NULL,
+                     zoom = T){
+  
+  
+  # load gene set
+  
+  top_celltype <- object@cell_type_rank %>%
+    arrange(desc(rank)) %>%
+    rownames(.) %>%
+    .[1]
+  
+  if(is.null(customized_gene_set)){
+    target_link_gene <- object@net[[top_celltype]][object@para$target, object@net[[top_celltype]][object@para$target, ] > 0] %>% names()
+    gene_set <- base::union(target_link_gene, object@para$target)
+  } else{
+    customized_gene_set <- base::intersect(customized_gene_set, object@para$gene4use)
+    gene_set <- base::union(customized_gene_set, object@para$target)
+  }
+  
+  # initialize modularization
+  new_net <- object@net[[top_celltype]][gene_set, gene_set]
+  hclust_out <- stats::hclust(stats::dist(1 - as.matrix(new_net)))
+  
+  gene_groups <- dynamicTreeCut::cutreeDynamic(
+    hclust_out,
+    minClusterSize = min_ModuleSize,
+    method = "tree",
+    deepSplit = FALSE,
+    useMedoids = FALSE
+  )
+  
+  gene_clusters <- stats::cutree(hclust_out, length(unique(gene_groups)) - 1)
+  
+  # zoom in
+  gene_num = length(gene_clusters)
+  if (zoom & gene_num > 100) {
+    order_gene <- gene_clusters %>% sort()
+    cent_loc <- order_gene[which(names(order_gene) == object@para$target)] %>% as.numeric()
+    new_gene <- names(order_gene[order_gene == cent_loc])
+    new_net <- new_net[new_gene, new_gene]
+    hclust_out <- stats::hclust(stats::dist(1 - as.matrix(new_net)))
+    gene_groups <- dynamicTreeCut::cutreeDynamic(
+      hclust_out,
+      minClusterSize = min_ModuleSize,
+      method = "tree",
+      deepSplit = FALSE,
+      useMedoids = FALSE
+    )
+    gene_clusters <- stats::cutree(hclust_out, length(unique(gene_groups)) - 1)
+    order_gene <- gene_clusters %>% sort() %>% names()
+  } else{
+    order_gene <- gene_clusters %>% sort() %>% names()
+  }
+  
+  object@para$gene_clusters = gene_clusters
+  object@para$order_gene = order_gene
+  object@para$subnet_node = gene_set
+  
+  return(object)
+}
+
+
 #' @title Visualize the modularized subnetwork with heatmap or network
 #'
-#' @description Modularization and visualization of drug-related subnetwork for cell types.
+#' @description visualization of target-related subnetwork for cell types.
 #' @param object  scRank object generated from \code{\link{Constr_net}}
 #' @param celltype select a cell type to visualize its network.
 #' @param mode select a mode to visualize network by \code{network} or \code{heatmap}. Default is \code{heatmap}.
 #' @param gene_set a vector containing interested gene set for visualizing network.
-#' @param min_ModuleSize parameter in \code{cutreeDynamic} for the minimal the number of genes in module. Defalut is \code{10}.
 #' @param highlight_gene highlighted gene in network. Default is \code{target gene}
 #' @param vertex_label_cex node size in network plot. Default is \code{0.5}
 #' @param charge charge in layout of node. Default is \code{0.01}
@@ -154,15 +230,12 @@ plot_dim <- function(object,
 #' @importFrom dplyr arrange desc
 #' @importFrom stats dist hclust cutree
 #' @importFrom igraph graph_from_adjacency_matrix layout.graphopt degree V E
-#' @import Seurat ggplot2 dynamicTreeCut ggpubr ComplexHeatmap
+#' @import dynamicTreeCut ggpubr ComplexHeatmap
 #' @export
 
 plot_net <- function(object,
                      celltype = NULL,
                      mode = "heatmap",
-                     gene_set = NULL,
-                     min_ModuleSize = 10,
-                     highlight_gene = NULL,
                      vertex_label_cex = 0.5,
                      charge = 0.01) {
 
@@ -180,66 +253,27 @@ plot_net <- function(object,
   }
 
   # check gene
-  if (is.null(highlight_gene)) {
-    highlight_gene <- object@para$target
-  }
 
-  if (is.null(gene_set)) {
-    top_celltype <- object@cell_type_rank %>%
-      arrange(desc(rank)) %>%
-      rownames(.) %>%
-      .[1]
-    target_link_gene <- object@net[[top_celltype]][highlight_gene, object@net[[top_celltype]][highlight_gene, ] > 0] %>% names()
-    gene_set <- base::union(target_link_gene, highlight_gene)
-  } else {
-    gene_set <- intersect(rownames(object@net[[1]]), gene_set)
-    gene_set <- base::union(gene_set, highlight_gene)
-  }
+  highlight_gene <- object@para$target
 
-  # module analysis
-  new_net <- object@net[[top_celltype]][gene_set, gene_set]
-
-  hclust_out <- stats::hclust(stats::dist(1 - as.matrix(new_net)))
-
-  gene_groups <- dynamicTreeCut::cutreeDynamic(
-    hclust_out,
-    minClusterSize = min_ModuleSize,
-    method = "tree",
-    deepSplit = FALSE,
-    useMedoids = FALSE
-  )
-
-  gene_clusters <- stats::cutree(hclust_out, length(unique(gene_groups)) - 1)
-
-  # zoom in
-  order_gene <- gene_clusters %>% sort()
-  cent_loc <- G.order_gene[which(names(G.order_gene) == highlight_gene)] %>% as.numeric()
-  new_gene <- names(order_gene[order_gene == cent_loc])
-  new_net <- new_net[new_gene, new_gene]
-  hclust_out <- stats::hclust(stats::dist(1 - as.matrix(new_net)))
-
-  gene_groups <- dynamicTreeCut::cutreeDynamic(
-    hclust_out,
-    minClusterSize = min_ModuleSize,
-    method = "tree",
-    deepSplit = FALSE,
-    useMedoids = FALSE
-  )
-
-  gene_clusters <- stats::cutree(hclust_out, length(unique(gene_groups)) - 1)
-
-  order_gene <- gene_clusters %>%
-    sort() %>%
-    names()
+  gene_set <- object@para$subnet_node
+  
+  order_gene = object@para$order_gene
+  gene_clusters = object@para$gene_clusters
 
   plot_data <- object@net[[celltype]][order_gene, order_gene]
 
   # plot
   if (mode == "heatmap") {
     # Generate annotations for rows
-    nM <- do.call(c, sapply(1:length(as.numeric(table(gene_clusters))), function(i) {
-      rep(paste0("Module", i), as.numeric(table(gene_clusters))[i])
-    }))
+    if(length(unique(gene_clusters)) < 2){
+      nM <- rep(paste0("Module1"), length(gene_clusters))
+    } else {
+      nM <- do.call(c, sapply(1:length(as.numeric(table(gene_clusters))), function(i) {
+        rep(paste0("Module", i), as.numeric(table(gene_clusters))[i])
+      }))
+    }
+    
     annotation_col <- data.frame(
       Module = factor(nM)
     )
@@ -274,9 +308,10 @@ plot_net <- function(object,
       legend = F
     ))
   } else if (mode == "network") {
+    plot_data <- object@net[[celltype]][order_gene, order_gene]
     Y <- plot_data
     Y <- as.matrix(Y)
-    module_number <- as.numeric(gene_clusters[which(names(gene_clusters %>% sort()) == highlight_gene)])
+    module_number <- as.numeric(gene_clusters[highlight_gene])
     module_show <- gene_clusters[gene_clusters == module_number] %>% names()
     Y <- igraph::graph_from_adjacency_matrix(Y[module_show, module_show], weighted = T, diag = FALSE)
 

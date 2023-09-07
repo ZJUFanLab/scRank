@@ -493,4 +493,3 @@
     }
     return(score)
 }
-

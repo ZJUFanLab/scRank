@@ -112,7 +112,7 @@ CreateScRank <- function(input,
     if (is.null(target)) {
       stop("Please input the target gene of inhibitor or inhibitor name")
     } else {
-      if (target %in% rownames(data)) {
+      if (all(target %in% rownames(data))) {
         target_gene <- target
       } else {
         stop("Please check if the target gene is in the gene expression profile. ")
@@ -262,7 +262,7 @@ Constr_net <- function(object,
   Net_final <- lapply(Net_integrat, function(Net) {
     Net <- .process_biedge(Net)
   })
-
+  
   names(Net_final) <- ct.keep
 
   object@net <- Net_final
@@ -279,7 +279,7 @@ Constr_net <- function(object,
 #'
 #' @description Rank drug-responsive cell type based on perturbation score of drug using manifold alignment and network propagation.
 #' @param object scRank object generated from \code{\link{CreateScRank}}.
-#' @param n.core Number of CPU cores to use. Default is a half of all cores.
+#' @param n.core Number of CPU cores to use. Default is all cores - 1.
 #' @param perturbed_target Target to be perturbed in dpGRN for ranking cell type. Default is the target in \code{object@para$target}
 #' @param n_dim number of low dimensions in manifold space using manifold alignment. Default is 2.
 #' @param n_hop the number of hop for network propagation. Default is 2.
@@ -312,7 +312,7 @@ rank_celltype <- function(object,
   }
   # register parallel
   if (is.null(n.core)) {
-    n.core <- round(parallel::detectCores() / 2)
+    n.core <- parallel::detectCores() - 2
   }
   n.core <- max(1, n.core)
   if (n.core != 1) {
@@ -400,3 +400,5 @@ rank_celltype <- function(object,
   object@cell_type_rank <- perb_score
   return(object)
 }
+
+
