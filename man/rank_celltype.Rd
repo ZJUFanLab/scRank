@@ -9,7 +9,10 @@ rank_celltype(
   n.core = NULL,
   n_dim = 2,
   n_hop = 2,
-  perturbed_target = NULL
+  perturbed_target = NULL,
+  resistance_target = NULL,
+  type = NULL,
+  method = 1
 )
 }
 \arguments{
@@ -22,6 +25,12 @@ rank_celltype(
 \item{n_hop}{the number of hop for network propagation. Default is 2.}
 
 \item{perturbed_target}{Target to be perturbed in dpGRN for ranking cell type. Default is the target in \code{object@para$target}}
+
+\item{resistance_target}{Target in alternative activated pathway that counteract the effects of anti-cancer drugs. Defaul is \code{NULL}.}
+
+\item{type}{characters meaning the MOAs of drug including antagonist or agonist. Default is antagonist.}
+
+\item{method}{1 means using the scRank method, 2 means using direct target gene expression, 3 means using downstream target expression. Default is 1.}
 }
 \value{
 scRank object containing the drug-responsive cell type rank.

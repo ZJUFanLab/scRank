@@ -6,17 +6,19 @@
 \usage{
 Constr_net(
   object,
-  min_cells = 25,
   select_ratio = 0.5,
   n_selection = 10,
   cut_ratio = 0.95,
-  n.core = NULL
+  keep_ratio = 0.25,
+  min_cells = 25,
+  n.core = NULL,
+  n.core_cp = 4,
+  use_py = F,
+  env = "base"
 )
 }
 \arguments{
 \item{object}{scRank object generated from \code{\link{CreateScRank}}.}
-
-\item{min_cells}{the minimum number of cells in a particular cell type retained for constructing robust scGRN. Cell type with cells lower than \code{min_cells} will be droped. Default is 25.}
 
 \item{select_ratio}{percent cells of total cells to be selected in random selection. Default is 0.5.}
 
@@ -24,7 +26,17 @@ Constr_net(
 
 \item{cut_ratio}{threshold of top percent edge weight to be cut. Edge with weight lower than the threshold will be cut. Default is 0.95.}
 
-\item{n.core}{Number of CPU cores to use. Default is all cores - 1.}
+\item{keep_ratio}{percent of the weaker edge weight should be kept. Default is 0.25.}
+
+\item{min_cells}{the minimum number of cells in a particular cell type retained for constructing robust scGRN. Cell type with cells lower than \code{min_cells} will be droped. Default is 25.}
+
+\item{n.core}{Number of CPU cores to use for constructing network. Default is all cores - 1.}
+
+\item{n.core_cp}{Number of CPU cores to use for integrating network. Default is 4. Recommendation is the number lower than the number of cell type.}
+
+\item{use_py}{Whether to use python to conduct CP decomposition}
+
+\item{env}{When using python in \code{use_py}, please define the python environment of installed tensorly and hdf5. Default is the 'base' environment. Anaconda is recommended.}
 }
 \value{
 scRank object containing the gene regulatory network for every cell type.
