@@ -9,7 +9,9 @@ plot_net(
   celltype = NULL,
   mode = "heatmap",
   vertex_label_cex = 0.5,
-  charge = 0.01
+  charge = 0.01,
+  highlight_gene = NULL,
+  gene_set = NULL
 )
 }
 \arguments{
@@ -23,9 +25,15 @@ plot_net(
 
 \item{charge}{charge in layout of node. Default is \code{0.01}}
 
+<<<<<<< HEAD
 \item{gene_set}{a vector containing interested gene set for visualizing network.}
 
 \item{highlight_gene}{highlighted gene in network. Default is \code{target gene}}
+=======
+\item{highlight_gene}{highlighted gene in network. Default is \code{target gene}}
+
+\item{gene_set}{a vector containing interested gene set for visualizing network.}
+>>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921
 }
 \description{
 visualization of target-related subnetwork for cell types.

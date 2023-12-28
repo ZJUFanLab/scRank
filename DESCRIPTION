@@ -1,8 +1,9 @@
 Package: scRank
-Title: Ranking cell types responsive to drug in sing-cell transcriptomic data.
+Title: Ranking cell types responsive to drug in sing-cell
+        transcriptomic data
 Version: 1.0.0
 Depends: R (>= 4.0.0), doParallel
-Authors@R:
+Authors@R: 
   person("Chengyu", "Li", email = "chengyuli@zju.edu.cn",
          role = c("aut", "cre"))
 Description: scRank is an R package to rank cell types responsive to drug in single-cell transcriptomics data under disease condition.
@@ -12,6 +13,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 LazyData: true
 LazyDataCompression: xz
+<<<<<<< HEAD
 Imports:
     Seurat (>= 3.0.0),
     methods,
@@ -43,3 +45,15 @@ Suggests:
     rmarkdown,
     knitr,
     prettydoc
+=======
+Imports: Seurat (>= 3.0.0), methods, dplyr, tidyr, tester, magrittr,
+        foreach, parallel, stats, RSpectra, ggrepel, tibble,
+        dynamicTreeCut, ComplexHeatmap, igraph, utils, RhpcBLASctl,
+        crayon, ggpubr, ggplot2, viridis, rTensor, pbapply, Matrix,
+        scales, msigdbr, readr, ggridges, fgsea, cowplot, scSHC
+Suggests: reticulate, stringr
+NeedsCompilation: no
+Packaged: 2023-12-27 16:25:36 UTC; lichengyu
+Author: Chengyu Li [aut, cre]
+Maintainer: Chengyu Li <chengyuli@zju.edu.cn>
+>>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921

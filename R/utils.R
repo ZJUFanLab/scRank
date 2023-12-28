@@ -113,6 +113,55 @@
     return(Chi_)
 }
 
+.integrat_net_tensorly <- function(net_list,nComp = 5,resolution = 1,env){
+  gene_name = rownames(net_list[[1]][[1]])
+  # write input data
+  tensor_list <- lapply(net_list, function(net) {
+    gene_num <- sqrt(unique(lengths(net)))
+    Chi <- array(data = 0, dim = c(gene_num, gene_num, 1, length(net)))
+    for (i in 1:length(net)) {
+      Chi[,,,i] <- as.matrix(net[[i]])
+    }
+    return(Chi)
+  })
+  
+  if (!dir.exists("tensorly_data")) {
+    dir.create("tensorly_data")
+  }
+  path <- getwd()
+  for (i in names(tensor_list)) {
+    h5write(tensor_list[[i]], file = paste0(path,"/tensorly_data/tensors.h5"), name = paste0("tensor_", i))
+  }
+  
+  res_py <- c("import tensorly as tl", "import numpy as np", "import h5py")
+  res_py <- c(res_py,paste0("with h5py.File('",path,"/tensorly_data/tensors.h5', 'r') as file:"))
+  res_py <- c(res_py,"    tensor_data = [np.array(file[name]) for name in file.keys()]")
+  res_py <- c(res_py,"    names_data = [name for name in file.keys()]")
+  res_py <- c(res_py,"results = []")
+  res_py <- c(res_py,"for tensor in tensor_data:")
+  res_py <- c(res_py,"    tensor_squeezed = np.squeeze(tensor, axis=1)")
+  res_py <- c(res_py,"    factors = tl.decomposition.parafac(tensor_squeezed, rank=5, tol=1e-6, n_iter_max=1000, random_state=12)")
+  res_py <- c(res_py,"    chi = tl.cp_to_tensor(factors)")
+  res_py <- c(res_py,"    chi_ = np.sum(chi, axis = 0)/10")
+  res_py <- c(res_py,"    chi_ = np.round(chi_/np.max(abs(chi_)),1)")
+  res_py <- c(res_py,"    results.append(chi_)")
+  res_py <- c(res_py,paste0("with h5py.File('",path,"/tensorly_data/results.h5', 'w') as file:")) 
+  res_py <- c(res_py,"    for name, result in zip(names_data, results):")
+  res_py <- c(res_py,"        dataset_name = name.replace('tensor_','result_')")
+  res_py <- c(res_py,"        file.create_dataset(dataset_name, data=result)")
+  readr::write_lines(x = res_py,file = paste0(path,"/tensorly_data/res_py.py"))
+  reticulate::use_condaenv(env)
+  reticulate::py_run_file(file = paste0(path,"/tensorly_data/res_py.py"))
+  results_list <- list()
+  for (i in names(tensor_list)) {
+    result_name <- paste0("result_", i)
+    results_list[[i]] <- h5read(paste0(path,"/tensorly_data/results.h5"), result_name)
+    results_list[[i]] <- methods::as(results_list[[i]], 'dgCMatrix')
+    rownames(results_list[[i]]) <- colnames(results_list[[i]]) <- gene_name
+  }
+  return(results_list)
+}
+
 .process_biedge <- function(Net,ratio = 0.25){
     B <- as.matrix(Net)
     B[abs(B) < abs(t(B))] <- 0
@@ -492,4 +541,112 @@
         }
     }
     return(score)
+<<<<<<< HEAD
+=======
+}
+
+# import from enrichplot package
+.gseaScores <- function(geneList, geneSet, exponent=1, fortify=FALSE) {
+  geneSet <- intersect(geneSet, names(geneList))
+  
+  N <- length(geneList)
+  Nh <- length(geneSet)
+  
+  Phit <- Pmiss <- numeric(N)
+  hits <- names(geneList) %in% geneSet ## logical
+  
+  Phit[hits] <- abs(geneList[hits])^exponent
+  NR <- sum(Phit)
+  Phit <- cumsum(Phit/NR)
+  
+  Pmiss[!hits] <-  1/(N-Nh)
+  Pmiss <- cumsum(Pmiss)
+  
+  runningES <- Phit - Pmiss
+  
+  ## ES is the maximum deviation from zero of Phit-Pmiss
+  max.ES <- max(runningES)
+  min.ES <- min(runningES)
+  if( abs(max.ES) > abs(min.ES) ) {
+    ES <- max.ES
+  } else {
+    ES <- min.ES
+  }
+  
+  df <- data.frame(x=seq_along(runningES),
+                   runningScore=runningES,
+                   position=as.integer(hits)
+  )
+  
+  if(fortify==TRUE) {
+    return(df)
+  }
+  
+  df$gene = names(geneList)
+  res <- list(ES=ES, runningES = df)
+  return(res)
+}
+
+.get_downstream_genes <- function(Net,target){
+  if(length(target) == 1){
+    downstream_genes <- names(Net[target,Net[target,] > 0])
+  } else{
+    downstream_genes1 <- names(Net[target[1],Net[target[1],] > 0])
+    downstream_genes2 <- names(Net[target[2],Net[target[2],] > 0])
+    downstream_genes <- union(downstream_genes1,downstream_genes2)
+  }
+  return(downstream_genes)
+}
+
+.cal_module_score <- function(seurat_object,features,group_by){
+  seurat_object <- Seurat::AddModuleScore(
+    object = seurat_object,
+    features = features,
+    name = 'downstream_Features',
+    ctrl = 10,
+    seed = 123,
+    slot = 'count'
+  )
+  normalize_data <- function(data) {
+    return ((data - min(data)) / (max(data) - min(data)))
+  }
+  
+  df <- seurat_object@meta.data %>% group_by(.data[[group_by]]) %>% summarise(mean = mean(.data$downstream_Features1)) %>%
+    mutate(scale = normalize_data(.data$mean)) %>%
+    mutate(
+      rank = rank(.data$scale),
+      `top_rank%` = rank / dplyr::n(),
+      `top_rank%` = scales::rescale(.data$`top_rank%`, c(0, 1))
+    ) %>% 
+    rename_with(~ "celltype", .cols = names(.)[1])
+  return(df)
+}
+
+.cluster_gene <- function(Net,cent_gene){
+  # Net : adjacency matrix
+  # cent_gene : 
+  gene_used <- lapply(cent_gene,function(x){
+    tmp <- colnames(Net)[abs(Net[x,]) > 0]
+    c(tmp,x)
+  })
+  if(length(gene_used) > 1){
+    gene_used <- do.call("union",gene_used)
+  } else{
+    gene_used <- unlist(gene_used)
+  }
+  hclust_out <- hclust(stats::dist(1-as.matrix(Net[gene_used,gene_used])))
+  gene_groups = dynamicTreeCut::cutreeDynamic(
+    hclust_out, 
+    minClusterSize = 10, 
+    method = "tree",
+    deepSplit = FALSE,
+    useMedoids = FALSE
+  )
+  gene_clusters = stats::cutree(hclust_out, length(unique(gene_groups))-1)
+  
+  # order the gene by gene groups
+  order_gene <- gene_clusters %>% sort()
+  
+  return(order_gene)
+>>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921
 }

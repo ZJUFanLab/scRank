@@ -10,7 +10,9 @@ CreateScRank(
   cell_type = "celltype",
   species,
   drug = NULL,
-  target = NULL
+  target = NULL,
+  type = "antagonist",
+  if_cluster = F
 )
 }
 \arguments{
@@ -23,13 +25,17 @@ each cell corresponding to gene-by-cell expression matrix}
 
 \item{species}{characters meaning species of the single-cell transcriptomic data. \code{human} or \code{mouse}.}
 
-\item{drug}{characters meaning the name of inhibitor drug.}
+\item{drug}{characters meaning the name of drug.}
 
-\item{target}{characters meaning the gene encoded target of interested drug.}
+\item{target}{characters meaning the gene encoded direct target of interested drug.}
+
+\item{type}{characters meaning the MOAs of drug including antagonist or agonist. Default is antagonist.}
+
+\item{if_cluster}{A logical meaning whether clustering single-cell transcriptomic data. Default is \code{FALSE}.}
 }
 \value{
 scRank object
 }
 \description{
-create scRank object using single-cell transcriptomics data.
+create scRank object using single-cell transcriptomic data.
 }

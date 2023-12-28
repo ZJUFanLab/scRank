@@ -4,7 +4,18 @@
 \alias{init_mod}
 \title{Initialization for modularizing subnetwork}
 \usage{
+<<<<<<< HEAD
 init_mod(object, min_ModuleSize = 10, customized_gene_set = NULL, zoom = T)
+=======
+init_mod(
+  object,
+  min_ModuleSize = 10,
+  customized_gene_set = NULL,
+  perturbed_target = NULL,
+  zoom = T,
+  top_celltype = NULL
+)
+>>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921
 }
 \arguments{
 \item{object}{scRank object generated from \code{\link{Constr_net}}}
@@ -13,7 +24,18 @@ init_mod(object, min_ModuleSize = 10, customized_gene_set = NULL, zoom = T)
 
 \item{customized_gene_set}{a vector contained gene name. Default is \code{Null}, but can also input customized gene set like disease-assoiciated genes.}
 
+<<<<<<< HEAD
 \item{zoom}{a logical value for zooming in target-related module. Default is \code{TRUE}}
+=======
+\item{perturbed_target}{target name of drug perturbation. Default is in scRank object.}
+
+\item{zoom}{a logical value for zooming in target-related module. Default is \code{TRUE}}
+
+\item{top_celltype}{name of cell type name. Default is in scRank object.}
+}
+\value{
+scRank object with moularized network
+>>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921
 }
 \description{
 Modularization of drug-related subnetwork for cell types.

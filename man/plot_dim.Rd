@@ -6,6 +6,7 @@
 \usage{
 plot_dim(
   object,
+  reductions = NULL,
   coordinate = NULL,
   color = NULL,
   point_size = 0.5,
@@ -14,6 +15,8 @@ plot_dim(
 }
 \arguments{
 \item{object}{scRank object generated from \code{\link{rank_celltype}}}
+
+\item{reductions}{Reduction name in the Seurat object. If it is NULL then present UMAP or TSNE, or input customized reduction name.}
 
 \item{coordinate}{a dataframe containing the low dimensional coordinates for each cells. The row name is the cell name identical with cell name in data of scRank object.}
 
