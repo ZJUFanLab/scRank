@@ -13,39 +13,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 LazyData: true
 LazyDataCompression: xz
-<<<<<<< HEAD
-Imports:
-    Seurat (>= 3.0.0),
-    methods,
-    dplyr,
-    tidyr,
-    stringr,
-    tester,
-    magrittr,
-    foreach,
-    parallel,
-    stats,
-    RSpectra,
-    ggrepel,
-    tibble,
-    dynamicTreeCut,
-    ComplexHeatmap,
-    igraph,
-    utils,
-    RhpcBLASctl,
-    crayon,
-    ggpubr,
-    ggplot2,
-    viridis,
-    rTensor,
-    pbapply,
-    Matrix,
-    scales
-Suggests: 
-    rmarkdown,
-    knitr,
-    prettydoc
-=======
 Imports: Seurat (>= 3.0.0), methods, dplyr, tidyr, tester, magrittr,
         foreach, parallel, stats, RSpectra, ggrepel, tibble,
         dynamicTreeCut, ComplexHeatmap, igraph, utils, RhpcBLASctl,
@@ -56,4 +23,3 @@ NeedsCompilation: no
 Packaged: 2023-12-27 16:25:36 UTC; lichengyu
 Author: Chengyu Li [aut, cre]
 Maintainer: Chengyu Li <chengyuli@zju.edu.cn>
->>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921

@@ -541,8 +541,6 @@
         }
     }
     return(score)
-<<<<<<< HEAD
-=======
 }
 
 # import from enrichplot package
@@ -648,5 +646,4 @@
   order_gene <- gene_clusters %>% sort()
   
   return(order_gene)
->>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921
 }

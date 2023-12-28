@@ -158,14 +158,10 @@ plot_dim <- function(object,
 #' @param object  scRank object generated from \code{\link{Constr_net}}
 #' @param min_ModuleSize parameter in \code{cutreeDynamic} for the minimal the number of genes in module. Default is \code{10}.
 #' @param customized_gene_set a vector contained gene name. Default is \code{Null}, but can also input customized gene set like disease-assoiciated genes.
-<<<<<<< HEAD
-#' @param zoom a logical value for zooming in target-related module. Default is \code{TRUE}
-=======
 #' @param perturbed_target target name of drug perturbation. Default is in scRank object.
 #' @param zoom a logical value for zooming in target-related module. Default is \code{TRUE}
 #' @param top_celltype name of cell type name. Default is in scRank object.
 #' @return scRank object with moularized network
->>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921
 #' @importFrom magrittr %>%
 #' @importFrom dplyr arrange desc
 #' @importFrom stats dist hclust cutree
@@ -175,24 +171,6 @@ plot_dim <- function(object,
 init_mod <- function(object,
                      min_ModuleSize = 10, 
                      customized_gene_set = NULL,
-<<<<<<< HEAD
-                     zoom = T){
-  
-  
-  # load gene set
-  
-  top_celltype <- object@cell_type_rank %>%
-    arrange(desc(rank)) %>%
-    rownames(.) %>%
-    .[1]
-  
-  if(is.null(customized_gene_set)){
-    target_link_gene <- object@net[[top_celltype]][object@para$target, object@net[[top_celltype]][object@para$target, ] > 0] %>% names()
-    gene_set <- base::union(target_link_gene, object@para$target)
-  } else{
-    customized_gene_set <- base::intersect(customized_gene_set, object@para$gene4use)
-    gene_set <- base::union(customized_gene_set, object@para$target)
-=======
                      perturbed_target = NULL,
                      zoom = T,
                      top_celltype = NULL){
@@ -231,7 +209,6 @@ init_mod <- function(object,
   } else{
     customized_gene_set <- base::intersect(customized_gene_set, object@para$gene4use)
     gene_set <- base::union(customized_gene_set, perturbed_target)
->>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921
   }
   
   # initialize modularization
@@ -252,13 +229,8 @@ init_mod <- function(object,
   gene_num = length(gene_clusters)
   if (zoom & gene_num > 100) {
     order_gene <- gene_clusters %>% sort()
-<<<<<<< HEAD
-    cent_loc <- order_gene[which(names(order_gene) == object@para$target)] %>% as.numeric()
-    new_gene <- names(order_gene[order_gene == cent_loc])
-=======
     cent_loc <- order_gene[which(names(order_gene) %in% perturbed_target)] %>% as.numeric()
     new_gene <- names(order_gene[order_gene %in% cent_loc])
->>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921
     new_net <- new_net[new_gene, new_gene]
     hclust_out <- stats::hclust(stats::dist(1 - as.matrix(new_net)))
     gene_groups <- dynamicTreeCut::cutreeDynamic(
@@ -321,13 +293,6 @@ plot_net <- function(object,
   }
 
   # check gene
-<<<<<<< HEAD
-
-  highlight_gene <- object@para$target
-
-  gene_set <- object@para$subnet_node
-  
-=======
   if (is.null(highlight_gene)) {
     highlight_gene <- object@para$target
   }
@@ -336,7 +301,6 @@ plot_net <- function(object,
     gene_set <- object@para$subnet_node
   }
 
->>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921
   order_gene = object@para$order_gene
   gene_clusters = object@para$gene_clusters
 
@@ -391,11 +355,7 @@ plot_net <- function(object,
     Y <- plot_data
     Y <- as.matrix(Y)
     module_number <- as.numeric(gene_clusters[highlight_gene])
-<<<<<<< HEAD
-    module_show <- gene_clusters[gene_clusters == module_number] %>% names()
-=======
     module_show <- gene_clusters[gene_clusters %in% module_number] %>% names()
->>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921
     Y <- igraph::graph_from_adjacency_matrix(Y[module_show, module_show], weighted = T, diag = FALSE)
 
     gY <- rownames(Y[])

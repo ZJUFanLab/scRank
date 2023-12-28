@@ -317,11 +317,8 @@ Constr_net <- function(object,
     Net <- .process_biedge(Net,ratio = keep_ratio)
   })
   
-<<<<<<< HEAD
-=======
   
 
->>>>>>> 0357c2efb26c5ed859a881d8f252f6f7b3a06921
   names(Net_final) <- ct.keep
 
   object@net <- Net_final
