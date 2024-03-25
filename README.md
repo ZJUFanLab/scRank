@@ -10,7 +10,7 @@ address it with scRank using a target-perturbed gene regulatory network (tpGRN) 
 
 ## Installation
 - install dependent packages `devtools` and [`rTensor`](https://github.com/rikenbit/rTensor)
-)
+
 ```{r}
 #install.packages("devtools")
 #devtools::install_github("rikenbit/rTensor")
