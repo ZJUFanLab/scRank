@@ -47,7 +47,8 @@ CreateScRank <- function(input,
                          drug,
                          target,
                          type,
-                         if_cluster)
+                         if_cluster,
+                         var.genes)
 ```
 
 The format of the `input` is as follows:
