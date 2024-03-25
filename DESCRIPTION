@@ -17,9 +17,9 @@ Imports: Seurat (>= 3.0.0), methods, dplyr, tidyr, tester, magrittr,
         foreach, parallel, stats, RSpectra, ggrepel, tibble,
         dynamicTreeCut, ComplexHeatmap, igraph, utils, RhpcBLASctl,
         crayon, ggpubr, ggplot2, viridis, rTensor, pbapply, Matrix,
-        scales, msigdbr, readr, ggridges, fgsea, cowplot, scSHC
-Suggests: reticulate, stringr
+        scales, msigdbr, readr, ggridges, fgsea, cowplot,
+Suggests: reticulate, stringr, scSHC
 NeedsCompilation: no
-Packaged: 2023-12-27 16:25:36 UTC; lichengyu
+Packaged: 2024-03-25 10:30:04 UTC; lichengyu
 Author: Chengyu Li [aut, cre]
 Maintainer: Chengyu Li <chengyuli@zju.edu.cn>

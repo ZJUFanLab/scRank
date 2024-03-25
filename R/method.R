@@ -10,7 +10,8 @@
 #' @param target characters meaning the gene encoded direct target of interested drug.
 #' @param type characters meaning the MOAs of drug including antagonist or agonist. Default is antagonist.
 #' @param if_cluster A logical meaning whether clustering single-cell transcriptomic data. Default is \code{FALSE}.
-#' @import Seurat scSHC
+#' @param var.genes var.genes (optional) vector of gene names representing the subset of genes used for clustering.
+#' @import Seurat 
 #' @importFrom tester is_numeric_matrix is_numeric_dataframe
 #' @importFrom methods as
 #' @importFrom dplyr select filter pull top_n
@@ -25,7 +26,8 @@ CreateScRank <- function(input,
                          drug = NULL,
                          target = NULL,
                          type = 'antagonist',
-                         if_cluster = F) {
+                         if_cluster = F,
+                         var.gene = NULL) {
   # import data and meta from Seurat
   if (is(input, "Seurat")) {
     if (!requireNamespace("Seurat", quietly = TRUE)) {
@@ -65,13 +67,21 @@ CreateScRank <- function(input,
     
     # create meta using scSHC to create metadata
     if(all(is.null(meta),if_cluster)){
-      message(crayon::cyan("Running clustering by scSHC..."))
-      requireNamespace("scSHC")
-      clusters <- scSHC::scSHC(data)
-      cells <- names(clusters[[1]])
-      labels <- unname(clusters[[1]])
-      meta <- data.frame(celltype = labels)
-      rownames(meta) <- cells
+      if (requireNamespace("scSHC", quietly = TRUE)) {
+        message(crayon::cyan("Running clustering by scSHC..."))
+        if (is.null(var.genes)){
+          clusters <- scSHC::scSHC(data)
+        } else {
+          commone_features <- intersect(rownames(data),var.genes)
+          clusters <- scSHC::scSHC(data[commone_features,],num_features = length(commone_features))
+        }
+        cells <- names(clusters[[1]])
+        labels <- unname(clusters[[1]])
+        meta <- data.frame(celltype = labels)
+        rownames(meta) <- cells
+      } else {
+        stop("scSHC is required for this functionality. Please install it using devtools::install_github(\"igrabski/sc-SHC\").")
+      }
     }
     
     # check cells are matched in data and meta

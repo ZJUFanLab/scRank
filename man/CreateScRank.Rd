@@ -12,7 +12,8 @@ CreateScRank(
   drug = NULL,
   target = NULL,
   type = "antagonist",
-  if_cluster = F
+  if_cluster = F,
+  var.gene = NULL
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ each cell corresponding to gene-by-cell expression matrix}
 \item{type}{characters meaning the MOAs of drug including antagonist or agonist. Default is antagonist.}
 
 \item{if_cluster}{A logical meaning whether clustering single-cell transcriptomic data. Default is \code{FALSE}.}
+
+\item{var.genes}{var.genes (optional) vector of gene names representing the subset of genes used for clustering.}
 }
 \value{
 scRank object
