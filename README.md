@@ -69,11 +69,11 @@ we load the demo dataset from Seurat object, the drug target is known as Brd4.
 
 
 ```{r}
-seuratObj <- system.file("extdata", "AML_object,rda", package="scRank")
+seuratObj <- system.file("extdata", "AML_objec.rda", package="scRank")
 load(seuratObj)
 obj <- CreateScRank(input = seuratObj,
                     species = 'mouse',
-                    cell_type = 'label',
+                    cell_type = 'labels',
                     target = 'Brd4')
 ```
 
