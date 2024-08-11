@@ -93,7 +93,7 @@ the final infered rank of cell types that determine the drug response is stored 
 For visulizing the rank of cell types in dimension reduction space, we can use the `plot_dim` function after `init_mod()`.
 
 ```{r}
-obj <- init_obj(obj)
+obj <- init_mod(obj)
 plot_dim(obj)
 ```
 <img src='https://github.com/ZJUFanLab/scRank/blob/main/img/scRank_data.png'>
