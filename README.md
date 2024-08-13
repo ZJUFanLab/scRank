@@ -101,8 +101,8 @@ plot_dim(obj)
 For visulizing the modularized drug-target-gene related subnetwork in specific cell type, we can use the `plot_net` function, where the parameter `mode` can be "heatmap" or "network" for different visualization.
 
 ```{r}
-plot_net(obj, mode = "heatmap", cell_type = "sensitive")
-plot_net(obj, mode = "heatmap", cell_type = "resistant")
+plot_net(obj, mode = "heatmap", celltype = "sensitive")
+plot_net(obj, mode = "heatmap", celltype = "resistant")
 ```
 <img src='https://github.com/ZJUFanLab/scRank/blob/main/img/sensitive_net.png'>
 <img src='https://github.com/ZJUFanLab/scRank/blob/main/img/resistant_net.png'>
