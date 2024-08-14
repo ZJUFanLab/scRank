@@ -61,7 +61,7 @@ The `meta` is required if `input` is not a Seurat objectas, where its format as 
 ## Tutorial
 In this tutorial, we will demonstrate how to  infer the drug-responsive cell type by scRank based on a demo dataset (GSE110894) containing BET inhibitor resistant and sensitive leukaemic cells.
 
-<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/original_data.png'>
+<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/original_data.png' width='500'>
 
 ### 1. Load the data and create a scRank object
 we load the demo dataset from Seurat object, the drug target is known as Brd4.
@@ -79,31 +79,34 @@ obj <- CreateScRank(input = seuratObj,
 
 ### 2. Construct the gene regulatory network
 ```{r}
-obj <- scRank::Constr_net(obj)
+obj <- Constr_net(obj)
 ```
 
 ### 3. Rank the cell types
 ```{r}
-obj <- scRank::rank_celltype(obj)
+obj <- rank_celltype(obj)
 ```
 
 the final infered rank of cell types that determine the drug response is stored in `obj@cell_type_rank`
 
 ### 4. Visualize the result
-For visulizing the rank of cell types in dimension reduction space, we can use the `plot_dim` function after `init_mod()`.
+To visualize the rank of cell types in dimension reduction space, we can use the `plot_dim` function.
+
+```{r}
+plot_dim(obj)
+```
+<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/scRank_data.png' width='500'>
+
+To visualize the modularized drug-target-gene subnetwork in a specific cell type, start by initializing the modularization using the `init_mod` function. Afterward, you can use the `plot_net` function to display the network. The `mode` parameter in `plot_net` allows you to choose between a "heatmap" or a "network" for different types of visualization.
 
 ```{r}
 obj <- init_mod(obj)
-plot_dim(obj)
-```
-<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/scRank_data.png'>
 
-For visulizing the modularized drug-target-gene related subnetwork in specific cell type, we can use the `plot_net` function, where the parameter `mode` can be "heatmap" or "network" for different visualization.
-
-```{r}
 plot_net(obj, mode = "heatmap", celltype = "sensitive")
 plot_net(obj, mode = "heatmap", celltype = "resistant")
 ```
-<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/sensitive_net.png'>
-<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/resistant_net.png'>
+<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/sensitive_net.png' width='500'>
+<img src='https://github.com/ZJUFanLab/scRank/blob/main/img/resistant_net.png' width='500'>
 
+## Reference
+Chengyu Li, et al. scRank infers drug-responsive cell types from untreated scRNA-seq data using a target-perturbed gene regulatory network, Cell Reports Medicine, 2024, https://doi.org/10.1016/j.xcrm.2024.101568
