@@ -294,8 +294,8 @@ Constr_net <- function(object,
       doParallel::stopImplicitCluster()
     }
     # python
-    requireMethods("rhdf5")
-    requireMethods("reticulate")
+    require("rhdf5")
+    require("reticulate")
     Net_integrat <- .integrat_net_tensorly(Net_set,env = env)
   } else{
     # clear register

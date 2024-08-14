@@ -581,6 +581,7 @@ scRank_GSEA <- function(object,
 #' @importFrom scales rescale
 #' @importFrom ggridges geom_density_ridges position_points_jitter theme_ridges
 #' @importFrom tibble as_tibble
+#' @export
 
 plot_drug_function <- function(object, 
                                celltype = NULL,
@@ -655,7 +656,7 @@ plot_drug_function <- function(object,
                       ES = fgseaRes_tibble$ES,
                       NES = fgseaRes_tibble$NES,
                       size = fgseaRes_tibble$size,
-                      leadingEdge = fgseaRes_tibble$leadingEdge %>% unlist() %>% str_c(collapse = ","))
+                      leadingEdge = fgseaRes_tibble$leadingEdge %>% unlist() %>% paste(collapse = ","))
     df2 <- utile_database[["Gene_Info"]][[object@para$species]] %>% filter(GeneID %in% df1$GeneID) %>% distinct(GeneID,.keep_all = T) %>% select(GeneID, Symbol)
     df3 <- merge(df1,df2,by = 'GeneID') %>% select(GeneID,Symbol,Pathway,value,rank,statsAdj,pval,padj,NES,size,ES,log2err,leadingEdge)
   }))
