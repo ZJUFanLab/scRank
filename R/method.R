@@ -27,7 +27,7 @@ CreateScRank <- function(input,
                          target = NULL,
                          type = 'antagonist',
                          if_cluster = F,
-                         var.gene = NULL) {
+                         var.genes = NULL) {
   # import data and meta from Seurat
   if (is(input, "Seurat")) {
     if (!requireNamespace("Seurat", quietly = TRUE)) {
@@ -46,7 +46,7 @@ CreateScRank <- function(input,
       message(crayon::cyan("Note: Metadata will be created after clustering"))
     } else if (is.null(meta)) {
       stop("Please provide a meta if not input a Seurat object!")
-    } else if (all(is.data.frame(meta), colnames(meta) %in% cell_type)) {
+    } else if (!all(is.data.frame(meta), colnames(meta) %in% cell_type)) {
       stop("Please provide a correct meta formatted with data.frame!") # add demo_meta()
     }
     seuratObj <- NULL

@@ -13,7 +13,7 @@ CreateScRank(
   target = NULL,
   type = "antagonist",
   if_cluster = F,
-  var.gene = NULL
+  var.genes = NULL
 )
 }
 \arguments{
