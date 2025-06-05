@@ -18,6 +18,9 @@ devtools::install_github("ZJUFanLab/scRank")
 ```
 ## Note
 
+### New
+- Add `subsetScRank()` function. see [issue #14](https://github.com/ZJUFanLab/scRank/issues/14)
+
 ### Key Updates
 - **Disease Relevance and Drug Effects Analysis:** Introducing the new `scRank_GSEA()` and `plot_drug_function()` functions for analyzing disease relevance and drug effects in the highest-ranking cell types.
 - **Drug Type Specification:** Added a `type` parameter in `rank_celltype()` to specify modeling effects of either agonists or antagonists, enhancing the versatility of drug response modeling.
